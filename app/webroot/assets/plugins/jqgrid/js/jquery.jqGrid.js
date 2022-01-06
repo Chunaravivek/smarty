@@ -9779,94 +9779,94 @@ $.jgrid.extend({
 					}
 				}
 			}
-			if(o.add) {
-				$($t).jqGrid('navButtonAdd', elem,{
-					caption : o.addtext,
-					title : o.addtitle,
-					buttonicon : o.addicon,
-					id : $t.p.id+"_iladd",
-					onClickButton : function () {
-						$($t).jqGrid('addRow', o.addParams);
-						if(!o.addParams.useFormatter) {
-							$("#"+gID+"_ilsave").removeClass('ui-state-disabled');
-							$("#"+gID+"_ilcancel").removeClass('ui-state-disabled');
-							$("#"+gID+"_iladd").addClass('ui-state-disabled');
-							$("#"+gID+"_iledit").addClass('ui-state-disabled');
-						}
-					}
-				});
-			}
-			if(o.edit) {
-				$($t).jqGrid('navButtonAdd', elem,{
-					caption : o.edittext,
-					title : o.edittitle,
-					buttonicon : o.editicon,
-					id : $t.p.id+"_iledit",
-					onClickButton : function () {
-						var sr = $($t).jqGrid('getGridParam','selrow');
-						if(sr) {
-							$($t).jqGrid('editRow', sr, o.editParams);
-							$("#"+gID+"_ilsave").removeClass('ui-state-disabled');
-							$("#"+gID+"_ilcancel").removeClass('ui-state-disabled');
-							$("#"+gID+"_iladd").addClass('ui-state-disabled');
-							$("#"+gID+"_iledit").addClass('ui-state-disabled');
-						} else {
-							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
-						}
-					}
-				});
-			}
-			if(o.save) {
-				$($t).jqGrid('navButtonAdd', elem,{
-					caption : o.savetext || '',
-					title : o.savetitle || 'Save row',
-					buttonicon : o.saveicon,
-					id : $t.p.id+"_ilsave",
-					onClickButton : function () {
-						var sr = $t.p.savedRow[0].id;
-						if(sr) {
-							var opers = $t.p.prmNames,
-							oper = opers.oper, tmpParams = o.editParams;
-							if($("#"+$.jgrid.jqID(sr), "#"+gID ).hasClass("jqgrid-new-row")) {
-								o.addParams.addRowParams.extraparam[oper] = opers.addoper;
-								tmpParams = o.addParams.addRowParams;
-							} else {
-								if(!o.editParams.extraparam) {
-									o.editParams.extraparam = {};
-								}
-								o.editParams.extraparam[oper] = opers.editoper;
-							}
-							if( $($t).jqGrid('saveRow', sr, tmpParams) ) {
-								$($t).jqGrid('showAddEditButtons');
-							}
-						} else {
-							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
-						}
-					}
-				});
-				$("#"+gID+"_ilsave").addClass('ui-state-disabled');
-			}
-			if(o.cancel) {
-				$($t).jqGrid('navButtonAdd', elem,{
-					caption : o.canceltext || '',
-					title : o.canceltitle || 'Cancel row editing',
-					buttonicon : o.cancelicon,
-					id : $t.p.id+"_ilcancel",
-					onClickButton : function () {
-						var sr = $t.p.savedRow[0].id, cancelPrm = o.editParams;
-						if(sr) {
-							if($("#"+$.jgrid.jqID(sr), "#"+gID ).hasClass("jqgrid-new-row")) {
-								cancelPrm = o.addParams.addRowParams;
-							}
-							$($t).jqGrid('restoreRow', sr, cancelPrm);
-							$($t).jqGrid('showAddEditButtons');
-						} else {
-							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
-						}
-					}
-				});
-				$("#"+gID+"_ilcancel").addClass('ui-state-disabled');
-			}
+//			if(o.add) {
+//				$($t).jqGrid('navButtonAdd', elem,{
+//					caption : o.addtext,
+//					title : o.addtitle,
+//					buttonicon : o.addicon,
+//					id : $t.p.id+"_iladd",
+//					onClickButton : function () {
+//						$($t).jqGrid('addRow', o.addParams);
+//						if(!o.addParams.useFormatter) {
+//							$("#"+gID+"_ilsave").removeClass('ui-state-disabled');
+//							$("#"+gID+"_ilcancel").removeClass('ui-state-disabled');
+//							$("#"+gID+"_iladd").addClass('ui-state-disabled');
+//							$("#"+gID+"_iledit").addClass('ui-state-disabled');
+//						}
+//					}
+//				});
+//			}
+//			if(o.edit) {
+//				$($t).jqGrid('navButtonAdd', elem,{
+//					caption : o.edittext,
+//					title : o.edittitle,
+//					buttonicon : o.editicon,
+//					id : $t.p.id+"_iledit",
+//					onClickButton : function () {
+//						var sr = $($t).jqGrid('getGridParam','selrow');
+//						if(sr) {
+//							$($t).jqGrid('editRow', sr, o.editParams);
+//							$("#"+gID+"_ilsave").removeClass('ui-state-disabled');
+//							$("#"+gID+"_ilcancel").removeClass('ui-state-disabled');
+//							$("#"+gID+"_iladd").addClass('ui-state-disabled');
+//							$("#"+gID+"_iledit").addClass('ui-state-disabled');
+//						} else {
+//							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
+//						}
+//					}
+//				});
+//			}
+//			if(o.save) {
+//				$($t).jqGrid('navButtonAdd', elem,{
+//					caption : o.savetext || '',
+//					title : o.savetitle || 'Save row',
+//					buttonicon : o.saveicon,
+//					id : $t.p.id+"_ilsave",
+//					onClickButton : function () {
+//						var sr = $t.p.savedRow[0].id;
+//						if(sr) {
+//							var opers = $t.p.prmNames,
+//							oper = opers.oper, tmpParams = o.editParams;
+//							if($("#"+$.jgrid.jqID(sr), "#"+gID ).hasClass("jqgrid-new-row")) {
+//								o.addParams.addRowParams.extraparam[oper] = opers.addoper;
+//								tmpParams = o.addParams.addRowParams;
+//							} else {
+//								if(!o.editParams.extraparam) {
+//									o.editParams.extraparam = {};
+//								}
+//								o.editParams.extraparam[oper] = opers.editoper;
+//							}
+//							if( $($t).jqGrid('saveRow', sr, tmpParams) ) {
+//								$($t).jqGrid('showAddEditButtons');
+//							}
+//						} else {
+//							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
+//						}
+//					}
+//				});
+//				$("#"+gID+"_ilsave").addClass('ui-state-disabled');
+//			}
+//			if(o.cancel) {
+//				$($t).jqGrid('navButtonAdd', elem,{
+//					caption : o.canceltext || '',
+//					title : o.canceltitle || 'Cancel row editing',
+//					buttonicon : o.cancelicon,
+//					id : $t.p.id+"_ilcancel",
+//					onClickButton : function () {
+//						var sr = $t.p.savedRow[0].id, cancelPrm = o.editParams;
+//						if(sr) {
+//							if($("#"+$.jgrid.jqID(sr), "#"+gID ).hasClass("jqgrid-new-row")) {
+//								cancelPrm = o.addParams.addRowParams;
+//							}
+//							$($t).jqGrid('restoreRow', sr, cancelPrm);
+//							$($t).jqGrid('showAddEditButtons');
+//						} else {
+//							$.jgrid.viewModal("#alertmod",{gbox:"#gbox_"+gID,jqm:true});$("#jqg_alrt").focus();							
+//						}
+//					}
+//				});
+//				$("#"+gID+"_ilcancel").addClass('ui-state-disabled');
+//			}
 			if(o.restoreAfterSelect === true) {
 				if($.isFunction($t.p.beforeSelectRow)) {
 					onSelect = $t.p.beforeSelectRow;

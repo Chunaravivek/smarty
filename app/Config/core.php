@@ -223,7 +223,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/smarty/app/Config/constant.php');
  * the cake shell command: cake schema create Sessions
  */
 	Configure::write('Session', array(
-		'defaults' => 'php'
+		'defaults' => 'php',
+                'ini' => [
+                    'session.cookie_lifetime' => 5000
+                ]
 	));
 
 /**

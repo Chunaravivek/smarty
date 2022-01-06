@@ -20,128 +20,60 @@ class AdminController extends AppController {
     }
     
     public function records() {
+//        echo "<pre>";
+//        print_r($this->params->query);
+//        exit;
         
-        /* Array of database columns which should be read and sent back to DataTables. Use a space where
-         * you want to insert a non-database field (for example a counter or static image)
-        */
-        
-        $aColumns = array('','id','full_name','email', 'status', 'created_date' ,'modified_date');
-        $search = array('full_name','email');
-        /*
-        * Paging
-        */
-        $sLimit = "";
-        $offset = "";
-        if ( isset( $this->request->query['iDisplayStart'] ) && $this->request->query['iDisplayLength'] != '-1' )
-        {
-            $sLimit = " ".intval( $this->request->query['iDisplayStart'] ).", ".
-                    intval( $this->request->query['iDisplayLength'] );
-
-            $paggin = explode(',', $sLimit);
-            $offset = $paggin[0];
-            $sLimit = $paggin[1];
+        if(isset($this->params->query['sidx']) && $this->params->query['sidx']!='') {
+            $order="Admin.".$this->params->query['sidx']." ".$this->params->query['sord']."";
+        } else {
+            $order="Admin.modified_date DESC";
         }
-
         
-        /*
-         * Ordering
-        */
-        $sOrder = "";
-        if ( isset( $this->request->query['iSortCol_0'] ) )
-        {
-           
-            $sOrder = " ";
-            for ( $i=0 ; $i<intval( $this->request->query['iSortingCols'] ) ; $i++ )
-            {
-                if ( $this->request->query[ 'bSortable_'.intval($this->request->query['iSortCol_'.$i]) ] == "true" )
-                {
-                    $sOrder .= "Admin.".$aColumns[ intval( $this->request->query['iSortCol_'.$i] ) ]." ".
-                        ($this->request->query['sSortDir_'.$i]==='asc' ? 'asc' : 'desc') .", ";
-                }
-            }
+        $i = 0;
+        $result = array();
+        
+        if (isset($this->params->query['page']) && $this->params->query['page'] != '') {
+            $result['page'] = (int) $this->params->query['page'];
+        } else {
+            $result['page'] = 1;
+        }
+        
+        if (isset($this->params->query['rows']) && $this->params->query['rows'] != '') {
+            $limit = (int) $this->params->query['rows'];
+        } else {
+            $limit = 30;
+        }
+        
+        $offset = ($result['page'] - 1) * $limit;
+
+        $keys = $this->Admin->find('all',array('order' => $order,'limit'=>$limit,'offset'=>$offset)); 
+        $keys_count = $this->Admin->find('count',array('order' => $order)); 
+        
+        $result['total'] = count($keys);
+       
+        $result['records'] = $keys_count;
+        
+        foreach ($keys as $key){
             
-            $sOrder = substr_replace( $sOrder, "", -2 );
-            if ( $sOrder == "ORDER BY" )
-            {
-                $sOrder = "";
-            }
-        }
-        // echo "<pre>"; print_r($sOrder); exit;
-     	/*
-            * Filtering
-            * NOTE this does not match the built-in DataTables filtering which does it
-            * word by word on any field. It's possible to do here, but concerned about efficiency
-            * on very large tables, and MySQL's regex functionality is very limited
-        */
-        $sWhere = "";
-        
-//        
-        $sWhere = " 1=1 ";
-        
-
-        if ( isset($this->request->query['sSearch']) && $this->request->query['sSearch'] != "" )
-        {
-           
-            $sWhere .= " AND ";
-            for ( $i=0 ; $i<count($search) ; $i++ )
-            {
-                
-                $sWhere .= " Admin.".$search[$i]." LIKE '%". $this->request->query['sSearch'] ."%' OR ";
-            }
-            $sWhere = substr_replace( $sWhere, "", -3 );
-           
-        }
-         
-        /* Individual column filtering */
-        for ( $i=0 ; $i<count($search) ; $i++ )
-        {
-            if ( isset($this->request->query['bSearchable_'.$i]) && $this->request->query['bSearchable_'.$i] == "true" && $this->request->query['sSearch_'.$i] != '' )
-            {
-                
-                if ( $sWhere == "" )
-                {
-                    $sWhere = " 1=1 ";
-                }
-                else
-                {
-                    $sWhere .= " AND ";
-                }
-                $sWhere = " Admin.".$search[$i]." LIKE '%".$this->request->query['sSearch_'.$i]."%' ";
-            }
+            $result['rows'][$i]['id'] = $key['Admin']['id'];
             
-        }
-       
-      
-        // echo "<pre>"; print_r($this->request->query); exit;
-       
-        $keys = $this->Admin->find('all', array('conditions' => $sWhere ,'order' => $sOrder, 'offset' => $offset , 'limit' => $sLimit));
-       
-        $iTotal = $this->Admin->find('count', array('conditions' => $sWhere, 'order' => $sOrder));
-
-        $idisplayrecords = $this->Admin->find('count', array('conditions' => $sWhere, 'limit' => $sLimit));
-        /*
-         * Output
-        */
-        $output = array(
-            "sEcho" => isset($this->request->query['sEcho']) ? intval($this->request->query['sEcho']) : 1,
-            "iTotalRecords" => $iTotal,
-            "iTotalDisplayRecords" => $idisplayrecords,
-            "aaData" => array(),
-        );
-        
-        foreach ($keys as $key) {
-            $output['aaData'][]['Admin'] = array(
-                'id'                =>  $key['Admin']['id'],
-                'full_name'         =>  $key['Admin']['full_name'],
-                'email'             =>  $key['Admin']['email'],
-                'status'            =>  $key['Admin']['status'],
-                'created_date'      =>  date('d/m/Y', $key['Admin']['created_date']),
-                'modified_date'     =>  date('d/m/Y h:i:s A', $key['Admin']['modified_date']),
+            $result['rows'][$i]['cell']=array(
+                '',
+                $key['Admin']['id'],
+                $key['Admin']['full_name'],
+                $key['Admin']['email'],
+                $key['Admin']['status'],
+                date('d/m/Y', $key['Admin']['created_date']),
+                date('d/m/Y h:i:s A', $key['Admin']['modified_date']),
             );
-           
+          
+            $i++;
         }
-        
-     	echo json_encode($output); exit;
+     
+        header('Content-Type: application/json');
+        echo json_encode($result);
+        exit;
     }
     
     

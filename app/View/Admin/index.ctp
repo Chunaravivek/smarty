@@ -174,9 +174,9 @@
             datatype: "json",
             colNames: ['Action', 'Id', 'Name', 'Email', 'Status' ,'Created Date', 'Modified Date'],
             colModel: [
-                {name: 'myac', index: 'myac', width: 15, align: 'center', sortable: false},
+                {name: 'myac', index: 'myac', width: 20, align: 'center', sortable: false},
                 {name: 'id', index: 'id', align: 'center', width: 10, editable: false},
-                {name: 'full_name', index: 'full_name', align: 'center', width: 50, editable: false},
+                {name: 'full_name', index: 'full_name', align: 'center', width: 50, editable: true},
                 {name: 'email', index: 'email', align: 'center', width: 80, editable: false},
                 {name: 'status', index: 'status', width: 20, editable: false, editoptions: {value: "1:2"}, formatter: checkboxFormatter, formatoptions: {disabled: false}, sortable: false},
                 {name: 'created_date', index: 'created_date', align: 'center', width: 30, editable: false},
@@ -196,14 +196,14 @@
                 var ids = jQuery(grid_selector).jqGrid('getDataIDs');
                 for(var i=0;i < ids.length;i++){
                     var cl = ids[i];
-                    var be = "<button class='btn btn-xs btn-default btn-quick' title='Edit Row' onclick=\"jQuery('#jqgrid').editRow('"+cl+"');\"><i class='fa fa-pencil'></i></button>";
-                    var ca = "<button class='btn btn-xs btn-default btn-quick' title='Cancel' onclick=\"jQuery('"+ grid_selector +"').restoreRow('"+cl+"');\"><i class='fa fa-trash-o'></i></button>";  
-                    jQuery(grid_selector).jqGrid('setRowData',ids[i],{myac:be+ca});
+                    var be = "<button class='btn btn-xs btn-default btn-quick' title='Edit Row' onclick=\"jQuery('"+ grid_selector +"').editRow('"+cl+"');\"><i class='fa fa-pencil'></i></button>";
+                    var se = "<button class='btn btn-xs btn-default btn-quick' title='Save Row' onclick=\"jQuery('#jqgrid').saveRow('"+cl+"');\"><i class='fa fa-save'></i></button>";
+                    var ca = "<button class='btn btn-xs btn-default btn-quick' title='Cancel' onclick=\"jQuery('"+ grid_selector +"').restoreRow('"+cl+"');\"><i class='fa fa-times'></i></button>";  
+                    jQuery(grid_selector).jqGrid('setRowData',ids[i],{myac:be+se+ca});
                 }
                 
                 var table = this;
                 setTimeout(function () {
-//                    updatePagerIcons(table);
                     enableTooltips(table);
                 }, 0);
             },
@@ -329,12 +329,6 @@
         jQuery(".ui-icon.fa.fa-refresh").parent(".btn-primary").removeClass("btn-primary").addClass("text-white bg-orange");
         jQuery(".ui-icon.fa.fa-trash-o").parent(".btn-primary").removeClass("btn-primary").addClass("btn-red");
         jQuery(".ui-icon.fa.fa-refresh").parent(".btn-primary").removeClass("btn-primary").addClass("btn-green");
-//        jQuery(".ui-icon.ui-icon-pencil").removeClass().addClass("fa fa-pencil");
-//        jQuery(".ui-icon.ui-icon-trash").removeClass().addClass("fa fa-trash-o");
-//        jQuery(".ui-icon.ui-icon-search").removeClass().addClass("fa fa-search");
-//        jQuery(".ui-icon.ui-icon-refresh").removeClass().addClass("fa fa-refresh");
-//        jQuery(".ui-icon.ui-icon-disk").removeClass().addClass("fa fa-save").parent(".btn-primary").removeClass("btn-primary").addClass("btn-success");
-//        jQuery(".ui-icon.ui-icon-cancel").removeClass().addClass("fa fa-times").parent(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 //
         jQuery( ".ui-icon.ui-icon-seek-prev" ).wrap( "<div class='btn btn-sm btn-default'></div>" );
         jQuery(".ui-icon.ui-icon-seek-prev").removeClass().addClass("fa fa-backward");
@@ -352,6 +346,7 @@
 
         function enableTooltips(table) {
             $('.navtable .ui-pg-button').tooltip({container: 'body'});
+            $('button.btn.btn-xs.btn-default.btn-quick').tooltip({container: 'body'});
             $(table).find('.ui-pg-div').tooltip({container: 'body'});
         }
     });

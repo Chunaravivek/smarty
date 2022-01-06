@@ -6,6 +6,7 @@
 <script type="text/javascript" src="<?= LOAD_PLUGIN; ?>form.validate/jquery.validation.min.js"></script>
 <script type="text/javascript" src="<?= LOAD_PLUGIN; ?>select2/js/select2.js"></script>
 <script type="text/javascript" src="<?= LOAD_PLUGIN; ?>select2/js/select2.min.js"></script>
+<script type="text/javascript" src="<?=  LOAD_PLUGIN; ?>toastr/toastr.js"></script>
 
 <script>
 </script>
